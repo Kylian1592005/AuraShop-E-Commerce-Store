@@ -1,6 +1,12 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 
 function ProductCard({ product }) {
+  const { dispatch } = useContext(CartContext);
+  const addToCart = () => {
+    dispatch({ type: "ADD_TO_CART", payload: product });
+  };
   return (
     <li>
       <h3>{product.title}</h3>
@@ -12,7 +18,7 @@ function ProductCard({ product }) {
       <p>
         <strong>Price:</strong> ${product.price}
       </p>
-      
+      <button onClick={addToCart}>Add to Cart</button>
       <Link to={`/products/${product.id}`}>View Details</Link>
     </li>
   );
