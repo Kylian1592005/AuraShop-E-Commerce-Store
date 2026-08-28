@@ -2,7 +2,26 @@ import { createContext, useReducer } from "react";
 
 export const CartContext = createContext();
 
-const initialState = [];
+const initialState = [
+  {
+    id: 101,
+    title: "Wireless Noise-Canceling Headphones",
+    price: 200,
+    quantity: 1,
+    image:
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80",
+    inStock: 8,
+  },
+  {
+    id: 102,
+    title: "Ergonomic Mechanical Keyboard",
+    price: 89.5,
+    quantity: 2,
+    image:
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&q=80",
+    inStock: 15,
+  },
+];
 
 function cartReducer(state, action) {
   switch (action.type) {
@@ -39,16 +58,13 @@ function cartReducer(state, action) {
 
     case "DECREASE_QUANTITY": {
       const productId = action.payload;
-      return state.reduce((acc, item) => {
+      const updatedCart = state.map((item) => {
         if (item.id === productId) {
-          if (item.quantity > 1) {
-            acc.push({ ...item, quantity: item.quantity - 1 });
-          }
-        } else {
-          acc.push(item);
+          return { ...item, quantity: item.quantity - 1 };
         }
-        return acc;
-      }, []);
+        return item;
+      });
+      return updatedCart.filter((item) => item.quantity > 0);
     }
 
     case "CLEAR_CART": {
