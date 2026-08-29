@@ -1,27 +1,17 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 
 export const CartContext = createContext();
 
-const initialState = [
-  {
-    id: 101,
-    title: "Wireless Noise-Canceling Headphones",
-    price: 200,
-    quantity: 1,
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80",
-    inStock: 8,
-  },
-  {
-    id: 102,
-    title: "Ergonomic Mechanical Keyboard",
-    price: 89.5,
-    quantity: 2,
-    image:
-      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&q=80",
-    inStock: 15,
-  },
-];
+const getInitialCart = () => {
+  try {
+    const storedData = localStorage.getItem("cart-items");
+    return storedData ? JSON.parse(storedData) : []; 
+  } catch (error) {
+    console.error("Failed to parse cart items from localStorage:", error);
+    return []; 
+  }
+};
+
 
 function cartReducer(state, action) {
   switch (action.type) {
@@ -77,7 +67,11 @@ function cartReducer(state, action) {
 }
 
 export function CartProvider({ children }) {
-  const [cartItems, dispatch] = useReducer(cartReducer, initialState);
+  const [cartItems, dispatch] = useReducer(cartReducer, null, getInitialCart);
+  
+  useEffect(() => {
+    localStorage.setItem("cart-items", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   return (
     <CartContext.Provider value={{ cartItems, dispatch }}>

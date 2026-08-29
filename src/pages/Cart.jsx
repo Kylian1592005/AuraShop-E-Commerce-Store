@@ -18,7 +18,8 @@ export default function Cart() {
           <li key={item.id}>
             <p>{item.title}</p>
             <p>Price: {item.price}</p>
-            <p>
+            {/* <img src={item.thumbnail} alt={item.title} /> */}
+            <div>
               <button
                 onClick={() =>
                   dispatch({
@@ -44,15 +45,15 @@ export default function Cart() {
               >
                 Remove
               </button>
-              <p>Total: {item.price * item.quantity}</p>
-            </p>
+              <p>Total: {(item.price * item.quantity).toFixed(2)}</p>
+            </div>
           </li>
         ))}
       </ul>
       <p>
         Subtotal:{" "}
         {cartItems.reduce(
-          (accumulator, item) => accumulator + item.price * item.quantity,
+          (accumulator, item) => (accumulator + item.price * item.quantity).toFixed(2),
           0,
         )}
       </p>
