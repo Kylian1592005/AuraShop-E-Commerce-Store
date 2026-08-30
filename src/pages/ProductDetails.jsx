@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 
@@ -13,17 +14,13 @@ export default function ProductDetails() {
     async function fetchSingleProduct() {
       try {
         setLoading(true);
-        const response = await fetch(`https://dummyjson.com/products/${id}`);
-
-        if (!response.ok) {
-          throw new Error("Failed to load product. Product might not exist.");
-        }
-
-        const data = await response.json();
-        setProduct(data);
+        const response = await axios.get(`https://dummyjson.com/products/${id}`);
+        setProduct(response.data);
         setError(null);
       } catch (err) {
-        setError(err.message || "An unexpected error occurred.");
+        setError(err.response?.status === 404
+          ? "Failed to load product. Product might not exist."
+          : err.message || "An unexpected error occurred.");
       } finally {
         setLoading(false);
       }

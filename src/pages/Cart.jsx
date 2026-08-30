@@ -22,6 +22,14 @@ export default function Cart() {
             <div>
               <button
                 onClick={() =>
+                  dispatch({ type: "DECREASE_QUANTITY", payload: item.id })
+                }
+              >
+                -
+              </button>
+              <strong>Quantity:</strong> {item.quantity}
+              <button
+                onClick={() =>
                   dispatch({
                     type: "INCREASE_QUANTITY",
                     payload: item.id,
@@ -29,14 +37,6 @@ export default function Cart() {
                 }
               >
                 +
-              </button>
-              <strong>Quantity:</strong> {item.quantity}
-              <button
-                onClick={() =>
-                  dispatch({ type: "DECREASE_QUANTITY", payload: item.id })
-                }
-              >
-                -
               </button>
               <button
                 onClick={() => {
@@ -53,7 +53,8 @@ export default function Cart() {
       <p>
         Subtotal:{" "}
         {cartItems.reduce(
-          (accumulator, item) => (accumulator + item.price * item.quantity).toFixed(2),
+          (accumulator, item) =>
+            (accumulator + item.price * item.quantity).toFixed(2),
           0,
         )}
       </p>

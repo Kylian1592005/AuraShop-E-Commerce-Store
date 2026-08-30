@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import ProductCard from "../components/ProductCard";
 
 export default function Products() {
@@ -9,9 +10,8 @@ export default function Products() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("https://dummyjson.com/products");
-        const data = await response.json();
-        setProducts(data.products);
+        const response = await axios.get("https://dummyjson.com/products");
+        setProducts(response.data.products);
       } catch (error) {
         setError(error.message || "Something is wrong");
       } finally {
