@@ -21,13 +21,27 @@ export default function Products() {
     fetchData();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading)
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center text-lg font-medium text-slate-600">
+        Loading...
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-700">
+        {error}
+      </div>
+    );
 
   return (
-    <div>
-      <h1>Product List</h1>
-      <ul>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Product List</h1>
+      </div>
+
+      <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
