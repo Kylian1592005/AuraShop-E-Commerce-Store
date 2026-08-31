@@ -45,7 +45,7 @@ export default function Cart() {
               >
                 Remove
               </button>
-              <p>Total: {(item.price * item.quantity).toFixed(2)}</p>
+              <p>Total: {(item.price).toFixed(2) * item.quantity}</p>
             </div>
           </li>
         ))}
@@ -54,7 +54,7 @@ export default function Cart() {
         Subtotal:{" "}
         {cartItems.reduce(
           (accumulator, item) =>
-            (accumulator + item.price * item.quantity).toFixed(2),
+            accumulator + (item.price).toFixed(2) * item.quantity,
           0,
         )}
       </p>
