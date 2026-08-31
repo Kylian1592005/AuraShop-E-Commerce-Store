@@ -6,7 +6,7 @@ function Navbar() {
       <nav className="bg-slate-900 text-white shadow-lg">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <Link to="/" className="text-2xl font-extrabold tracking-tight text-cyan-400 transition hover:text-cyan-300">
-            Store
+            AuraShop
           </Link>
 
           <div className="flex items-center gap-6 text-sm font-medium sm:text-base">
