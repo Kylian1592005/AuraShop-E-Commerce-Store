@@ -8,7 +8,7 @@ export default function Home() {
           New arrivals
         </span>
         <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
-          My SwiftShop E-Commerce
+          My Shop E-Commerce
         </h1>
 
         <p className="mx-auto mt-5 max-w-2xl text-lg text-slate-600">
