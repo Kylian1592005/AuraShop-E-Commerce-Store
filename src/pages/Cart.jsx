@@ -68,7 +68,6 @@ export default function Cart() {
           </ul>
           <p>Subtotal: ${formatCurrency(subTotal)}</p>
           <Link to="/products">Continue Shopping</Link>
-          &nbsp;
           <Link to="/checkout">Proceed to Checkout</Link>
         </>
       )}

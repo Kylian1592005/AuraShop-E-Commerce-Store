@@ -2,23 +2,10 @@ import { createContext, useEffect, useReducer } from "react";
 
 export const CartContext = createContext();
 
-const sanitizeCartItem = (product) => ({
-  id: product.id,
-  title: product.title,
-  price: product.price,
-  quantity: 1,
-  ...(product.category ? { category: product.category } : {}),
-});
-
 const getInitialCart = () => {
   try {
     const storedData = localStorage.getItem("cart-items");
-    if (!storedData) return [];
-
-    const parsedData = JSON.parse(storedData);
-    return Array.isArray(parsedData)
-      ? parsedData.map((item) => sanitizeCartItem(item))
-      : [];
+    return storedData ? JSON.parse(storedData) : [];
   } catch (error) {
     console.error("Failed to parse cart items from localStorage:", error);
     return [];
@@ -29,16 +16,21 @@ function cartReducer(state, action) {
   switch (action.type) {
     case "ADD_TO_CART": {
       const product = action.payload;
-      const cleanProduct = sanitizeCartItem(product);
-      const existingItem = state.find((item) => item.id === cleanProduct.id);
+      const existingItem = state.find((item) => item.id === product.id);
       if (existingItem) {
         return state.map((item) =>
-          item.id === cleanProduct.id
+          item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
       }
-      return [...state, { ...cleanProduct, quantity: 1 }];
+      return [
+        ...state,
+        {
+          ...product,
+          quantity: 1,
+        },
+      ];
     }
 
     case "REMOVE_FROM_CART": {
@@ -75,7 +67,7 @@ function cartReducer(state, action) {
 
 export function CartProvider({ children }) {
   const [cartItems, dispatch] = useReducer(cartReducer, null, getInitialCart);
-  
+
   useEffect(() => {
     localStorage.setItem("cart-items", JSON.stringify(cartItems));
   }, [cartItems]);
