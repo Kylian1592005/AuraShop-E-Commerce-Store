@@ -1,8 +1,9 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { formatCurrency } from "../utils/formatCurrency";
+import { useNavigate } from "react-router-dom";
 
-export default function Checkout() {
+export default function CheckOut() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -10,10 +11,30 @@ export default function Checkout() {
     address: "",
   });
   const { cartItems } = useContext(CartContext);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const order = {
+      id: crypto.randomUUID(),
+      customer: formData,
+      items: cartItems,
+      total,
+      date: new Date().toISOString(),
+    };
+
+    localStorage.setItem("orders", JSON.stringify(order));
+
     console.log("Customer Information Submitted:", formData);
+    navigate("/order-success", {
+      state: {
+        orderId: order.id,
+        total: order.total,
+        items: order.items,
+        date: order.date,
+      },
+    });
   };
 
   const handleChange = (e) => {
@@ -35,8 +56,13 @@ export default function Checkout() {
   return (
     <div className="mx-auto max-w-6xl space-y-8">
       <div className="grid gap-8 lg:grid-cols-[1.5fr_0.9fr]">
-        <form onSubmit={handleSubmit} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-          <h1 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900">Customer Information</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+        >
+          <h1 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900">
+            Customer Information
+          </h1>
 
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="block text-sm font-medium text-slate-700 sm:col-span-1">
@@ -97,11 +123,16 @@ export default function Checkout() {
         </form>
 
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-          <h1 className="mb-5 text-3xl font-extrabold tracking-tight text-slate-900">Order Summary</h1>
+          <h1 className="mb-5 text-3xl font-extrabold tracking-tight text-slate-900">
+            Order Summary
+          </h1>
 
           <ul className="space-y-3">
             {cartItems.map((item) => (
-              <li key={item.id} className="border-b border-slate-200 pb-3 last:border-b-0 last:pb-0">
+              <li
+                key={item.id}
+                className="border-b border-slate-200 pb-3 last:border-b-0 last:pb-0"
+              >
                 <div className="flex items-center justify-between gap-3">
                   <p className="font-medium text-slate-800">{item.title}</p>
                   <p className="text-slate-600">${item.price}</p>
@@ -111,9 +142,16 @@ export default function Checkout() {
           </ul>
 
           <div className="mt-6 space-y-2 text-slate-700">
-            <p className="flex items-center justify-between"><span>Subtotal:</span> <span>${formatCurrency(subTotal)}</span></p>
-            <p className="flex items-center justify-between"><span>Shipping:</span> <span>${formatCurrency(shippingCost)}</span></p>
-            <p className="flex items-center justify-between border-t border-slate-200 pt-2 text-lg font-bold text-slate-900"><span>Total:</span> <span>${formatCurrency(total)}</span></p>
+            <p className="flex items-center justify-between">
+              <span>Subtotal:</span> <span>${formatCurrency(subTotal)}</span>
+            </p>
+            <p className="flex items-center justify-between">
+              <span>Shipping:</span>{" "}
+              <span>${formatCurrency(shippingCost)}</span>
+            </p>
+            <p className="flex items-center justify-between border-t border-slate-200 pt-2 text-lg font-bold text-slate-900">
+              <span>Total:</span> <span>${formatCurrency(total)}</span>
+            </p>
           </div>
         </div>
       </div>

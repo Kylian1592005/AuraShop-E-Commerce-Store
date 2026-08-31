@@ -4,7 +4,8 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
-import Checkout from "./pages/CheckOut";
+import CheckOut from "./pages/CheckOut";
+import OrderSuccess from "./pages/OrderSuccess";
 
 const router = createBrowserRouter([
   {
@@ -29,13 +30,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/checkout",
-        element: <Checkout />
+        element: <CheckOut />
+      },
+      {
+        path: "/order-success",
+        element: <OrderSuccess />
       }
     ],
   },
 ]);
-
-
 
 function App() {
   return <RouterProvider router={router} />;

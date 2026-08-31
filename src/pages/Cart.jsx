@@ -37,7 +37,7 @@ export default function Cart() {
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="text-xl font-bold text-slate-900">{item.title}</p>
-                      <p className="mt-1 text-slate-600">Price: ${priceNumber.toFixed(2)}</p>
+                      <p className="mt-1 text-slate-600">Price: ${formatCurrency(priceNumber)}</p>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3">
