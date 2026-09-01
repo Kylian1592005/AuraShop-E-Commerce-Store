@@ -1,12 +1,17 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 
 function ProductCard({ product }) {
   const { dispatch } = useContext(CartContext);
+  const [added, setAdded] = useState(false);
 
   const addToCart = () => {
     dispatch({ type: "ADD_TO_CART", payload: product });
+    setAdded(true);
+    setTimeout(() => {
+      setAdded(false);
+    }, 2000);
   };
 
   return (
@@ -19,20 +24,29 @@ function ProductCard({ product }) {
 
       <div className="mt-4 flex flex-1 flex-col">
         <h3 className="text-xl font-bold text-slate-900">{product.title}</h3>
-        <p className="mt-2 line-clamp-3 text-sm text-slate-600">{product.description}</p>
+        <p className="mt-2 line-clamp-3 text-sm text-slate-600">
+          {product.description}
+        </p>
 
         <p className="mt-3 text-sm text-slate-500">
-          <span className="font-semibold text-slate-700">Category:</span> {product.category}
+          <span className="font-semibold text-slate-700">Category:</span>{" "}
+          {product.category}
         </p>
         <p className="mt-2 text-lg font-bold text-cyan-700">${product.price}</p>
 
         <div className="mt-5 flex items-center gap-3">
           <button
             onClick={addToCart}
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
+            disabled={added}
+            className={`rounded-lg px-4 py-2 text-sm font-semibold text-white transition duration-200 
+              ${added 
+                ? "bg-emerald-600 cursor-not-allowed" 
+                : "bg-slate-900 hover:bg-slate-700"
+              }`}
           >
-            Add to Cart
+            {added ? "✓ Added" : "Add to Cart"}
           </button>
+          
           <Link
             to={`/products/${product.id}`}
             className="text-sm font-semibold text-cyan-700 transition hover:text-cyan-900"
