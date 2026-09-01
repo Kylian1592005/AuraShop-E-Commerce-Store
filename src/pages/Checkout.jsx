@@ -1,9 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext,  useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { formatCurrency } from "../utils/formatCurrency";
 import { useNavigate } from "react-router-dom";
 
 export default function CheckOut() {
+  const { dispatch } = useContext(CartContext);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,17 +25,25 @@ export default function CheckOut() {
       date: new Date().toISOString(),
     };
 
-    localStorage.setItem("orders", JSON.stringify(order));
+    const existingOrders = JSON.parse(localStorage.getItem("orders")) || [];
 
-    console.log("Customer Information Submitted:", formData);
+    const updatedOrders = [{ ...existingOrders, order }];
+
+    localStorage.setItem("orders", JSON.stringify(updatedOrders));
+
     navigate("/order-success", {
       state: {
         orderId: order.id,
         total: order.total,
         items: order.items,
         date: order.date,
+        subtotal,
+        shipping,
+        total,
       },
     });
+
+    dispatch({ type: "CLEAR_CART" });
   };
 
   const handleChange = (e) => {
@@ -45,13 +54,13 @@ export default function CheckOut() {
     }));
   };
 
-  const subTotal = cartItems.reduce(
+  const subtotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0,
   );
 
-  const shippingCost = cartItems.length > 0 ? 10 : 0;
-  const total = shippingCost + subTotal;
+  const shipping = cartItems.length > 0 ? 10 : 0;
+  const total = shipping + subtotal;
 
   return (
     <div className="mx-auto max-w-6xl space-y-8">
@@ -143,11 +152,11 @@ export default function CheckOut() {
 
           <div className="mt-6 space-y-2 text-slate-700">
             <p className="flex items-center justify-between">
-              <span>Subtotal:</span> <span>${formatCurrency(subTotal)}</span>
+              <span>Subtotal:</span> <span>${formatCurrency(subtotal)}</span>
             </p>
             <p className="flex items-center justify-between">
               <span>Shipping:</span>{" "}
-              <span>${formatCurrency(shippingCost)}</span>
+              <span>${formatCurrency(shipping)}</span>
             </p>
             <p className="flex items-center justify-between border-t border-slate-200 pt-2 text-lg font-bold text-slate-900">
               <span>Total:</span> <span>${formatCurrency(total)}</span>

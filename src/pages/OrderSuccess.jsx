@@ -8,7 +8,7 @@ export default function OrderSuccess() {
     orderId = "ORD-2025-001",
     total = 0,
     items = [],
-    date = new Date().toISOString(),
+    date,
   } = orderData;
 
   const formattedDate = new Date(date).toLocaleDateString("en-US", {
@@ -75,7 +75,7 @@ export default function OrderSuccess() {
                         </div>
 
                         <div className="text-right">
-                          <p className="font-semibold text-slate-900">${itemTotal.toFixed(2)}</p>
+                          <p className="font-semibold text-slate-900">${formatCurrency(itemTotal)}</p>
                         </div>
                       </div>
                     </li>
