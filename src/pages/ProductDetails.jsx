@@ -8,8 +8,9 @@ export default function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [stock, setStock] = useState(0);
   const { dispatch } = useContext(CartContext);
-  const [ added, setAdded ] = useState(false);
+  const [added, setAdded] = useState(false);
 
   useEffect(() => {
     async function fetchSingleProduct() {
@@ -19,6 +20,7 @@ export default function ProductDetails() {
           `https://dummyjson.com/products/${id}`,
         );
         setProduct(response.data);
+        setStock(response.data.stock);
         setError(null);
       } catch (err) {
         setError(
@@ -35,11 +37,25 @@ export default function ProductDetails() {
   }, [id]);
 
   const addToCart = () => {
+    if (stock <= 0) return;
+
     dispatch({ type: "ADD_TO_CART", payload: product });
+    setStock((currentStock) => Math.max(currentStock - 1, 0));
     setAdded(true);
     setTimeout(() => {
       setAdded(false);
     }, 2000);
+  };
+
+  const renderStars = (rating) => {
+    const stars = [];
+    const roundedRating = Math.round(rating);
+
+    for (let i = 1; i <= 5; i++) {
+      stars.push(i <= roundedRating ? "★" : "☆");
+    }
+
+    return stars.join("");
   };
 
   if (loading)
@@ -93,16 +109,18 @@ export default function ProductDetails() {
               <span className="font-semibold text-slate-900">Description:</span>{" "}
               {product.description}
             </p>
-            <p>
-              <span className="font-semibold text-slate-900">Rating:</span>{" "}
-              {product.rating} / 5
+            <p className="flex items-center gap-2">
+              <span className="font-semibold text-slate-900">Rating:</span>
+              <span className="text-lg text-amber-500">
+                {renderStars(product.rating)}
+              </span>
             </p>
             <p>
               <span className="font-semibold text-slate-900">
                 Stock Status:
               </span>{" "}
-              {added ? product.stock - 1 : product.stock}{" "}
-              items left
+              {stock}
+              {stock > 1 ? " items left" : " item left"}
             </p>
           </div>
 
@@ -110,9 +128,10 @@ export default function ProductDetails() {
             onClick={addToCart}
             disabled={added}
             className={`rounded-lg px-4 py-2 text-sm font-semibold text-white transition duration-200 
-              ${added 
-                ? "bg-emerald-600 cursor-not-allowed" 
-                : "bg-slate-900 hover:bg-slate-700"
+              ${
+                added
+                  ? "bg-emerald-600 cursor-not-allowed"
+                  : "bg-slate-900 hover:bg-slate-700"
               }`}
           >
             {added ? "✓ Added" : "Add to Cart"}
