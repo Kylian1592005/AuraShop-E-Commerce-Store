@@ -51,6 +51,12 @@ function Navbar() {
                 {cartCounts}
               </span>
             </Link>
+            <Link
+              to="/orders"
+              className="text-white transition hover:text-cyan-300"
+            >
+              Orders
+            </Link>
           </div>
         </div>
       </nav>

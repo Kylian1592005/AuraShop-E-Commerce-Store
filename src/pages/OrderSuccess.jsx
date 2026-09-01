@@ -89,12 +89,18 @@ export default function OrderSuccess() {
             </ul>
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               to="/products"
               className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-6 py-3 text-base font-semibold text-white transition hover:bg-emerald-500"
             >
               Continue Shopping
+            </Link>
+            <Link
+              to="/orders"
+              className="inline-flex items-center justify-center rounded-lg border border-emerald-600 px-6 py-3 text-base font-semibold text-emerald-700 transition hover:bg-emerald-50"
+            >
+              Order History
             </Link>
           </div>
         </div>

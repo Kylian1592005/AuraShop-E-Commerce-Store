@@ -1,4 +1,4 @@
-import { useContext,  useState } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { formatCurrency } from "../utils/formatCurrency";
 import { useNavigate } from "react-router-dom";
@@ -21,15 +21,24 @@ export default function CheckOut() {
       id: crypto.randomUUID(),
       customer: formData,
       items: cartItems,
+      subtotal,
+      shipping,
       total,
       date: new Date().toISOString(),
     };
 
-    const existingOrders = JSON.parse(localStorage.getItem("orders")) || [];
+    try {
+      const savedOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+      const existingOrders = Array.isArray(savedOrders) ? savedOrders : [];
+      localStorage.setItem(
+        "orders",
+        JSON.stringify([...existingOrders, order]),
+      );
+    } catch (error) {
+      console.error("Failed to save order:", error);
+    }
 
-    const updatedOrders = [{ ...existingOrders, order }];
-
-    localStorage.setItem("orders", JSON.stringify(updatedOrders));
+    dispatch({ type: "CLEAR_CART" });
 
     navigate("/order-success", {
       state: {
@@ -37,13 +46,8 @@ export default function CheckOut() {
         total: order.total,
         items: order.items,
         date: order.date,
-        subtotal,
-        shipping,
-        total,
       },
     });
-
-    dispatch({ type: "CLEAR_CART" });
   };
 
   const handleChange = (e) => {
@@ -155,8 +159,7 @@ export default function CheckOut() {
               <span>Subtotal:</span> <span>${formatCurrency(subtotal)}</span>
             </p>
             <p className="flex items-center justify-between">
-              <span>Shipping:</span>{" "}
-              <span>${formatCurrency(shipping)}</span>
+              <span>Shipping:</span> <span>${formatCurrency(shipping)}</span>
             </p>
             <p className="flex items-center justify-between border-t border-slate-200 pt-2 text-lg font-bold text-slate-900">
               <span>Total:</span> <span>${formatCurrency(total)}</span>

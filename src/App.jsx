@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
 import CheckOut from "./pages/CheckOut";
 import OrderSuccess from "./pages/OrderSuccess";
+import Orders from "./pages/Orders";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/order-success",
         element: <OrderSuccess />
+      },
+      {
+        path: "/orders",
+        element: <Orders />
       }
     ],
   },
