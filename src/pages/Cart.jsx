@@ -26,6 +26,7 @@ export default function Cart() {
     dispatch({ type: "REMOVE_FROM_CART", payload: itemId });
   };
 
+
   return (
     <div className="mx-auto max-w-4xl">
       <h1 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900">
@@ -44,17 +45,7 @@ export default function Cart() {
         </div>
       ) : (
         <>
-          <ul className="space-y-4">
-            {cartItems.map((item) => (
-              <CartItems
-                key={item.id}
-                item={item}
-                onIncrease={handleIncrease}
-                onDecrease={handleDecrease}
-                onRemove={handleRemove}
-              />
-            ))}
-          </ul>
+          <CartItems onIncrease={handleIncrease} onDecrease={handleDecrease} onRemove={handleRemove}/>
           <CartSummary subTotal={subTotal} itemCount={itemCount} />
         </>
       )}
