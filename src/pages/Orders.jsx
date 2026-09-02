@@ -2,7 +2,7 @@ import { useState } from "react";
 import OrderCard from "../components/OrderCard";
 import { Link } from "react-router-dom";
 
-export default function Orders() {
+export default function OrderHistory() {
   const [orders] = useState(() => {
     try {
       const data = JSON.parse(localStorage.getItem("orders"));
@@ -18,7 +18,9 @@ export default function Orders() {
         <p className="text-xs font-semibold uppercase tracking-widest text-cyan-700">
           Account
         </p>
-        <h1 className="mt-2 text-3xl font-bold text-slate-900">Orders</h1>
+        <h1 className="mt-2 text-3xl font-bold text-slate-900">
+          Order History
+        </h1>
       </div>
 
       {orders.length === 0 ? (
