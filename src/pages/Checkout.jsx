@@ -1,20 +1,25 @@
 import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
-import { formatCurrency } from "../utils/formatCurrency";
 import { useNavigate } from "react-router-dom";
 import CustomerInfo from "../components/CustomerInfo";
 import OrderSummary from "../components/OrderSummary";
 
 export default function CheckOut() {
-  const { dispatch } = useContext(CartContext);
+  const { cartItems, dispatch } = useContext(CartContext);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     address: "",
   });
-  const { cartItems } = useContext(CartContext);
   const navigate = useNavigate();
+
+  const subtotal = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  );
+  const shipping = cartItems.length > 0 ? 10 : 0;
+  const total = subtotal + shipping;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -65,7 +70,12 @@ export default function CheckOut() {
       <div className="grid gap-8 lg:grid-cols-[1.5fr_0.9fr]">
        <CustomerInfo handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
 
-       <OrderSummary />
+       <OrderSummary
+         cartItems={cartItems}
+         subtotal={subtotal}
+         shipping={shipping}
+         total={total}
+       />
       </div>
     </div>
   );

@@ -8,7 +8,10 @@ export default function CartItems({ onIncrease, onDecrease, onRemove }) {
   return (
     <ul className="space-y-4">
       {cartItems.map((item) => (
-        <li className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <li
+          key={item.id}
+          className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xl font-bold text-slate-900">{item.title}</p>
