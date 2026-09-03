@@ -71,7 +71,6 @@ export default function CheckOut() {
        <CustomerInfo handleSubmit={handleSubmit} handleChange={handleChange} formData={formData}/>
 
        <OrderSummary
-         cartItems={cartItems}
          subtotal={subtotal}
          shipping={shipping}
          total={total}

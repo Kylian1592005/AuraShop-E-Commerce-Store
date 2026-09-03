@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import { formatCurrency } from "../utils/formatCurrency";
+import { CartContext } from "../context/CartContext";
 
-export default function OrderSummary({ cartItems, subtotal, shipping, total }) {
+export default function OrderSummary({ subtotal, shipping, total }) {
+  const { cartItems } = useContext(CartContext);
   return (
     <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
       <h1 className="mb-5 text-3xl font-extrabold tracking-tight text-slate-900">
