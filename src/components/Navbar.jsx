@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+import SearchFilter from "./SearchFilter";
 
 function Navbar() {
   const { cartItems } = useContext(CartContext);
@@ -11,15 +12,19 @@ function Navbar() {
   return (
     <>
       <nav className="sticky top-0 z-50 bg-slate-900 text-white shadow-lg">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-4 px-4 py-3 sm:px-6 lg:flex-nowrap lg:px-8">
           <Link
             to="/"
-            className="text-2xl font-extrabold tracking-tight text-cyan-400 transition hover:text-cyan-300"
+            className="shrink-0 text-2xl font-extrabold tracking-tight text-cyan-400 transition hover:text-cyan-300"
           >
             AuraShop
           </Link>
 
-          <div className="flex items-center gap-6 text-sm font-medium sm:text-base">
+          <div className="order-3 basis-full lg:order-none lg:min-w-0 lg:flex-1">
+            <SearchFilter />
+          </div>
+
+          <div className="ml-auto flex items-center gap-4 text-sm font-medium sm:gap-6 sm:text-base">
             <Link to="/" className="text-white transition hover:text-cyan-300">
               Home
             </Link>

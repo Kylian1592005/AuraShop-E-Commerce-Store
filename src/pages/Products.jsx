@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
+import { useSearchParams } from "react-router-dom";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+  const selectedCategory = searchParams.get("category") || "all";
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get("https://dummyjson.com/products");
+        const url =
+        selectedCategory && selectedCategory !== "all"
+          ? `https://dummyjson.com/products/category/${selectedCategory}`
+          : "https://dummyjson.com/products";
+
+      const response = await axios.get(url);
         setProducts(response.data.products);
       } catch (error) {
         setError(error.message || "Something is wrong");
@@ -20,6 +29,18 @@ export default function Products() {
     }
     fetchData();
   }, []);
+
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch =
+      !searchQuery ||
+      `${product.title} ${product.description}`
+        .toLowerCase()
+        .includes(searchQuery);
+    const matchesCategory =
+      selectedCategory === "all" ||
+      product.category.toLowerCase() === selectedCategory.toLowerCase();
+    return matchesSearch && matchesCategory;
+  });
 
   if (loading)
     return (
@@ -37,15 +58,31 @@ export default function Products() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Product List</h1>
+      <div className="flex flex-col gap-2 border-b border-slate-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-700">
+            Explore the collection
+          </p>
+          <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-slate-900">
+            Product List
+          </h1>
+        </div>
+        <p className="text-sm text-slate-500">
+          {filteredProducts.length} {filteredProducts.length === 1 ? "item" : "items"}
+        </p>
       </div>
 
-      <ul className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </ul>
+      {filteredProducts.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-16 text-center text-slate-500">
+          No products match your search or filter criteria.
+        </div>
+      ) : (
+        <ul className="grid items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          {filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
