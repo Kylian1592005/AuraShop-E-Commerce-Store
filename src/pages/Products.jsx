@@ -15,13 +15,16 @@ export default function Products() {
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
+      setError(null);
+
       try {
         const url =
-        selectedCategory && selectedCategory !== "all"
-          ? `https://dummyjson.com/products/category/${selectedCategory}`
-          : "https://dummyjson.com/products";
+          selectedCategory && selectedCategory !== "all"
+            ? `https://dummyjson.com/products/category/${selectedCategory}`
+            : "https://dummyjson.com/products";
 
-      const response = await axios.get(url);
+        const response = await axios.get(url);
         setProducts(response.data.products);
       } catch (error) {
         setError(error.message || "Something is wrong");
@@ -30,7 +33,7 @@ export default function Products() {
       }
     }
     fetchData();
-  }, []);
+  }, [selectedCategory]);
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch =
