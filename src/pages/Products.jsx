@@ -7,9 +7,11 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
   const selectedCategory = searchParams.get("category") || "all";
+  const productsPerPage = 9;
 
   useEffect(() => {
     async function fetchData() {
@@ -41,6 +43,15 @@ export default function Products() {
       product.category.toLowerCase() === selectedCategory.toLowerCase();
     return matchesSearch && matchesCategory;
   });
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage,
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory]);
 
   if (loading)
     return (
@@ -77,11 +88,56 @@ export default function Products() {
           No products match your search or filter criteria.
         </div>
       ) : (
-        <ul className="grid items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3">
-          {filteredProducts.map((product) => (
+        <>
+          <ul className="grid items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {paginatedProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
-          ))}
-        </ul>
+            ))}
+          </ul>
+
+          {totalPages > 1 && (
+            <nav
+              aria-label="Product pagination"
+              className="flex flex-wrap items-center justify-center gap-2 pt-2"
+            >
+              <button
+                type="button"
+                onClick={() => setCurrentPage((page) => page - 1)}
+                disabled={currentPage === 1}
+                className="rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-700 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Previous
+              </button>
+
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    type="button"
+                    onClick={() => setCurrentPage(page)}
+                    aria-current={currentPage === page ? "page" : undefined}
+                    className={`h-10 w-10 rounded-lg text-sm font-semibold transition ${
+                      currentPage === page
+                        ? "bg-slate-900 text-white"
+                        : "border border-slate-200 text-slate-700 hover:border-cyan-500 hover:text-cyan-700"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
+
+              <button
+                type="button"
+                onClick={() => setCurrentPage((page) => page + 1)}
+                disabled={currentPage === totalPages}
+                className="rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-cyan-500 hover:text-cyan-700 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+              </button>
+            </nav>
+          )}
+        </>
       )}
     </div>
   );
