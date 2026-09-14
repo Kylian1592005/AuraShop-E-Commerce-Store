@@ -11,7 +11,7 @@ export default function Products() {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
   const selectedCategory = searchParams.get("category") || "all";
-  const productsPerPage = 9;
+  const productsPerPage = 21;
 
   useEffect(() => {
     async function fetchData() {
@@ -21,8 +21,8 @@ export default function Products() {
       try {
         const url =
           selectedCategory && selectedCategory !== "all"
-            ? `https://dummyjson.com/products/category/${selectedCategory}`
-            : "https://dummyjson.com/products";
+            ? `https://dummyjson.com/products/category/${selectedCategory}?limit=0`
+            : "https://dummyjson.com/products?limit=0";
 
         const response = await axios.get(url);
         setProducts(response.data.products);
