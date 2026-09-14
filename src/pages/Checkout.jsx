@@ -31,6 +31,7 @@ export default function CheckOut() {
       subtotal,
       shipping,
       total,
+      status: "Processing",
       date: new Date().toISOString(),
     };
 

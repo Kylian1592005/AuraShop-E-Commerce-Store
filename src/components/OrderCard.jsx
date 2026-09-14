@@ -25,6 +25,9 @@ export default function OrderCard({ orders }) {
                   <p className="mt-1 font-semibold text-slate-900">
                     {order.id || "Unknown ID"}
                   </p>
+                  <span className="mt-2 inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">
+                    {order.status || "Processing"}
+                  </span>
                 </div>
 
                 <div className="flex items-center gap-6 sm:justify-end">
@@ -46,6 +49,23 @@ export default function OrderCard({ orders }) {
                   </div>
                 </div>
               </div>
+
+              {order.customer && (
+                <div className="mt-4 grid gap-2 rounded-xl bg-slate-50 px-3 py-3 text-sm text-slate-700 sm:grid-cols-3">
+                  <p>
+                    <span className="font-semibold text-slate-900">Customer:</span>{" "}
+                    {order.customer.name || "N/A"}
+                  </p>
+                  <p>
+                    <span className="font-semibold text-slate-900">Email:</span>{" "}
+                    {order.customer.email || "N/A"}
+                  </p>
+                  <p className="sm:col-span-3">
+                    <span className="font-semibold text-slate-900">Address:</span>{" "}
+                    {order.customer.address || "N/A"}
+                  </p>
+                </div>
+              )}
 
               <div className="mt-4 space-y-2">
                 {items.length === 0 ? (
