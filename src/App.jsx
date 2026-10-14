@@ -4,7 +4,6 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
-import CheckOut from "./pages/CheckOut";
 import OrderSuccess from "./pages/OrderSuccess";
 import Orders from "./pages/Orders";
 
